@@ -21,7 +21,7 @@ file_gathering(){
 	do
 		size=$(du -s "$1" | awk '{print $1}')
 	done
-	find $1 > "$root_directory$2".new
+	find "$1" > "$root_directory$2".new
 	sort "$root_directory$2".new "$root_directory$2".value  | uniq -u > "$root_directory$2".tmp
 
 	if [ -n "$(cat "$root_directory$2".tmp)" ]
@@ -37,7 +37,7 @@ file_gathering(){
 				cp "$stringdif" "$copypath"
 				echo [$(date)] 'Copy file to' "$copypath" >> "$root_directory"/log.txt
 			else
-				echo [$(date)] "File or directory "$stringdif"  was deleted!" >> "$root_directory"/log.txt
+				echo [$(date)] "File or directory $stringdif  was deleted!" >> "$root_directory"/log.txt
 			fi
 		done
 	fi
@@ -52,11 +52,11 @@ do
 	do
 		i=$((i+1))
 		string=$(sed -n "$i"p disks.info)
-		path=$(echo $string | awk '{print $2}')
-		size=$(echo $string | awk '{print $3}')
-		if [ $size -ne $(du -s "$path" | awk '{print $1}') ]
+		path=$(echo "$string" | awk '{print $2}')
+		size=$(echo "$string" | awk '{print $3}')
+		if [ "$size" -ne $(du -s "$path" | awk '{print $1}') ]
 		then
-			file_gathering "$path" "$(echo $string | awk '{print $1}')"
+			file_gathering "$path" "$(echo "$string" | awk '{print $1}')"
 		fi
 	done
 done
